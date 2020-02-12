@@ -1,0 +1,451 @@
+<html>
+<title>Funnelcast -- B. W. Lewis</title>
+<body style="margin: 80px;">
+
+<!-- BEGIN SLIDES -->
+
+<div class="slide">
+<br/><br/>
+<h1>
+Foreach, future, and parallel computing with R
+</h1>
+<br/><br/><br/>
+Bryan Lewis
+</div>
+
+<div class="slide">
+<img src="coding.gif" style="width: 100%; margin-top: -80px;"></img>
+</div>
+
+<div class="slide">
+<img src="numbers.jpg" style="margin-left: -80px; margin-top: -80px; width: 108%;"></img>
+<div style="margin-left: 440px; margin-top: -900px; font-face: 1200; font-size: 3em;">
+Science
+</div>
+</div>
+
+<div class="slide">
+<img src="inferno.jpg" style="width: 100%; margin-top: -80px;"></img>
+</div>
+
+<div class="slide">
+<img src="advanced_r.jpeg" style="margin-left: 440px; width: 40%; margin-top: -80px;"></img>
+</div>
+
+<div class="slide">
+<img src="vector.png" style="margin-left: 440px; width: 40%; margin-top: -80px;"></img>
+</div>
+
+<div class="slide">
+<center>
+<img src="sloth.jpeg" width="110%" style="margin-left: -80px; margin-top: -80px;"></img>
+</center>
+</div>
+
+<div class="slide">
+<center>
+<img src="profvis.png"></img>
+</center>
+</div>
+
+
+<div class="slide">
+<img src="rstudio.png" style="margin-left: -80px; margin-top: -80px;"></img>
+</div>
+
+<div class="slide">
+<ul style="margin-left:500px; margin-top: 300px;">
+<li> lapply
+</ul>
+</div>
+
+<div class="slide">
+<ul style="margin-left:500px; margin-top: 300px;">
+<li> lapply
+<li> replicate
+</ul>
+</div>
+
+<div class="slide">
+<ul style="margin-left:500px; margin-top: 300px;">
+<li> lapply
+<li> replicate
+<li> Reduce
+</ul>
+</div>
+
+
+<div class="slide">
+<ul style="margin-left:500px; margin-top: 300px;">
+<li> lapply
+<li> replicate
+<li> Reduce
+<li> Map
+</ul>
+</div>
+
+
+<div class="slide">
+<br/><br/><br/><br/>
+<center>
+Map? Or is it map? hmmmm....
+</center>
+</div>
+
+
+
+<div class="slide">
+<img src="mac.jpeg" height="800px" style="margin-left: 300px;"></img>
+</div>
+
+<div class="slide">
+<div style="margin-top: 300px; margin-left: 400px; font-size: 2em;">lapply &rarr; mclapply</div>
+</div>
+
+<div class="slide">
+<div style="margin-top: 300px; margin-left: 400px; font-size: 2em;">Map &rarr; mcMap</div>
+</div>
+
+<div class="slide">
+<img src="mac-flame.jpeg" width="110%" style="margin-left: -80px; margin-top: -80px;"></img>
+</div>
+
+<div class="slide">
+<img src="windows.jpeg" width="110%" style="margin-left: -80px; margin-top: -80px;"></img>
+</div>
+
+<div class="slide">
+<div style="margin-top: 300px; margin-left: 250px; font-size: 2em;">clusterWhateverApply</div>
+</div>
+
+<div class="slide">
+<img src="oakridge.jpeg" style="width: 100%; margin-top: -80px;"></img>
+</div>
+
+
+<div class="slide">
+<div style="margin-top: 300px; margin-left: 150px; font-size: 1.5em;">"Real HPC programmers use MPI"</div>
+</div>
+
+<div class="slide">
+<div style="margin-top: 300px; margin-left: 150px; font-size: 1.5em;">"Real HPC programmers use MPI"</div>
+<br/><br/>
+<center>
+Whatever.
+</center>
+</div>
+
+
+<div class="slide">
+<center>
+<img src="yikes.jpeg" style="width: 80%; margin-top: -80px;"></img>
+</center>
+</div>
+
+
+<div class="slide">
+</div>
+
+<div class="slide">
+<center>
+<img src="steve1.jpg" style="width:500px;"></img>
+<br/>
+Steve Weston
+</center>
+</div>
+
+<div class="slide">
+<br/>
+<h3>Package authors, code writers</h3>
+Decide <i>which</i> parts of their code can run in parallel.
+</div>
+
+<div class="slide">
+<br/>
+<h3>Package authors, code writers</h3>
+Decide <i>which</i> parts of their code can run in parallel.
+
+<br/><br/>
+<h3>Users</h3>
+Decide <i>how</i> to run in parallel.
+</div>
+
+
+<div class="slide">
+<br/><br/>
+<h1 style="font-family: courier;">
+> foreach == Philosophy
+<br/>
+[1] TRUE
+</h1>
+</div>
+
+
+<div class="slide">
+<h1 style="font-size: 3em; margin-left: 800px; margin-top: 400px;">
+Haskell
+</h1>
+</div>
+
+<div class="slide">
+<h1 style="font-size: 3em; margin-left: 800px; margin-top: 400px;">
+Raskell
+</h1>
+</div>
+
+<div class="slide">
+<h3>Despite the for-loop syntax, foreach works kinda like</h3>
+<br/><br/>
+<div style="font-family: courier; font-size: 1.5em;">
+Reduce(Map(...))
+</div>
+</div>
+
+<div class="slide">
+<xmp>
+foreach(i = 1:2, j = 3:4,       .combine = rbind)
+
+
+%dopar%
+
+
+{
+  data.frame(i, j)
+}
+</xmp>
+</div>
+
+<div class="slide">
+<img src="structure.png" width="110%" style="margin-left: -80px; margin-top: -80px;"></img>
+</div>
+
+<div class="slide">
+<xmp>
+foreach(i = 1:2, j = 3:4, .combine = rbind)  %dopar%
+{
+  data.frame(i, j)
+}
+
+
+  i j
+1 1 3
+2 2 4
+
+Warning message:
+executing %dopar% sequentially: no parallel backend registered 
+</xmp>
+</div>
+
+<div class="slide">
+<xmp>
+library(doParallel)
+registerDoParallel()
+
+foreach(i = 1:2, j = 3:4, .combine = rbind)  %dopar%
+{
+  data.frame(i, j)
+}
+
+
+  i j
+1 1 3
+2 2 4
+</xmp>
+<div style="margin-top: -450px; margin-left: 650px; font-weight: 900; color: #aa0000;"> &larr; THIS TIME, IN PARALLEL </div>
+</div>
+
+
+<div class="slide">
+<h2>The future package is not opinionated, you can do the same thing with any syntax!</h2>
+<br/>
+<div style="float: left; margin-left: 250px;">
+<ul>
+<li> for loops
+<li> lapply
+<li> Map
+</ul>
+</div>
+<div style="float: right; margin-right: 550px;">
+<ul>
+<li> map
+<li> replicate
+<li> no loop at all
+<li> ...
+</div>
+<div style="clear: both;"></div>
+</div>
+
+<div class="slide">
+<h1 style="font-size: 3em; margin-left: 500px; margin-top: 300px;">
+Magic
+</h1>
+</div>
+
+
+<div class="slide">
+<h3 style="margin-bottom: -40px;"> Scoped objects are auto-magically exported </h3>
+<xmp>
+k <- pi
+
+foreach(i = 1:2, j = 3:4,
+        .combine = rbind)  %dopar%
+{
+  data.frame(i, j, k)
+}
+
+
+  i j        k
+1 1 3 3.141593
+2 2 4 3.141593
+</xmp>
+</div>
+
+<div class="slide">
+<img src="planet.jpeg" width="110%" style="margin-left: -80px; margin-top: -80px;"></img>
+</div>
+
+<div class="slide">
+<h3>Compose two foreach loops with the %:% operator</h3>
+<br/>
+<h3>Or compose a foreach loop with a filter predicate using 'when'</h3>
+<xmp>
+foreach(i = 1:10, j = 1:10) %:%
+  when(i < j) %dopar% {
+    i + j
+}
+</xmp>
+</div>
+
+<div class="slide">
+<h3>Future works interoperably with foreach through doFuture, as do other parallel adapters</h3>
+<ul>
+<li> doParallel
+<li> doSNOW
+<li> doMC
+<li> <b>doMPI</b>
+<li> <b>doRedis</b>
+</ul>
+<h4> And a new guide to writing adapters: </h4>
+<a href="https://github.com/bwlewis/writing_foreach_adapters/">https://github.com/bwlewis/writing_foreach_adapters/</a>
+</div>
+
+<div class="slide">
+<center>
+<img src="steve2.jpg" style="position: absolute; left: 1200px; top: 50px;"></img>
+</center>
+</div>
+
+<div class="slide">
+<h1 style="font-family: Calibri">Don't mourn...</h1>
+<center>
+<img src="steve2.jpg" style="position: absolute; left: 1200px; top: 50px;"></img>
+</center>
+</div>
+
+<div class="slide">
+<h1 style="font-family: Calibri">Don't mourn...</h1>
+<h1 style="margin-left: 300px; font-family: Calibri">parallelize!</h1>
+<center>
+<img src="steve2.jpg" style="position: absolute; left: 1200px; top: 50px;"></img>
+</center>
+</div>
+
+<!--END OF SLIDES-->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+a:link {
+  color: black;
+}
+
+a:visited {
+  color: #099146;
+}
+.slide {
+  font-family: arial;
+  font-size: 40pt;
+  font-weight: 1800;
+  width: "100%";
+}
+xmp {
+  font-family: monospace;
+  font-size: 36pt;
+}
+
+@media print {
+.slide { 
+    page-break-before: always;
+  }
+}
+@page { size: landscape; }
+</style>
+
+<div class="buttons" style="position:fixed; bottom: 20px;">
+  <button onclick="plusDivs(-1)">&#10094;</button>
+  <button onclick="plusDivs(1)">&#10095;</button>
+  <button onclick="printSlides()">print</button>
+</div>
+<div id="pagenumber" style="position:fixed; bottom: 20px; right: 20px;">1</div>
+
+<script>
+var slideIndex = 1;
+document.addEventListener("keydown", ki, false);
+
+function ki(e) {
+  var keyCode = e.keyCode;
+  if(keyCode==39) {
+    plusDivs(1);
+  }
+  if(keyCode==37) {
+    plusDivs(-1);
+  }
+  if(keyCode==80) {
+    printSlides();
+  }
+  if(keyCode==72) {
+    hideButtons();
+  }
+}
+showDivs(slideIndex);
+
+function hideButtons() {
+  var x = document.getElementsByClassName("buttons");
+  if(x[0].style.display == "none") x[0].style.display = "block"
+  else x[0].style.display = "none";
+}
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("slide");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  x[slideIndex - 1].style.display = "block";  
+  var y = document.getElementById("pagenumber");
+  y.innerHTML = slideIndex + "/" + x.length;
+}
+
+function printSlides() {
+  var i;
+  var y = document.getElementById("pagenumber");
+  y.innerHTML = "";
+  var x = document.getElementsByClassName("slide");
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "block";  
+  }
+  window.print();
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  x[slideIndex - 1].style.display = "block";  
+}
+</script>
